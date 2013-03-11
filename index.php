@@ -5,30 +5,11 @@
         $path = "uploads/" . $file["filefield"]["name"];
         $size = getimagesize($path);
         if ($size[0] > $size[1]) {
-          print "landscape";
-          resize($path, 2480, 1748);
+          create_image($path, 2480, 1748, 'assets/overlay-landscape.png');
         }
         else {
-          print "portrait";
+          create_image($path, 1748, 2480, 'assets/overlay-portrait.png');
         }
-
-
-
-
-
-        /*$overlay = imagecreatefrompng('assets/overlay-landscape.png');
-        $upload = imagecreatefromjpeg('uploads/' . $file["filefield"]["name"]);
-
-        imagealphablending($overlay, true);
-        imagesavealpha($overlay, true);
-
-        imagecopymerge($upload, $overlay, 0, 0, 0, 0, 2480, 1748, 100);
-
-        header('Content-Type: image/png');
-        imagepng($upload);
-
-        imagedestroy($upload);
-        imagedestroy($overlay);*/
       }
 
     }
@@ -36,7 +17,7 @@
 
   }
 
-  function resize($path, $width, $height) {
+  function create_image($path, $width, $height, $overlay_path) {
     $orig = imagecreatefromstring(file_get_contents($path));
     $dest = ImageCreateTrueColor($width, $height);
 
@@ -57,7 +38,7 @@
     ImageCopyResampled($dest, $orig, 0, 0, $source_x, $source_y, $width, $height, $source_width, $source_height);
 
 
-    $overlay = imagecreatefrompng('assets/overlay-landscape.png');
+    $overlay = imagecreatefrompng($overlay_path);
     imagealphablending($overlay, true);
     imagecopy($dest, $overlay, 0, 0, 0, 0, $width, $height);
 
@@ -69,13 +50,6 @@
 
     return $dest;
   }
-
-
-
-
-
-
-
 
 ?>
 <!DOCTYPE html>
