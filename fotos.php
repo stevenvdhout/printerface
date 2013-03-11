@@ -14,6 +14,7 @@
   </head>
   <body>
 
+    <div class="container">
       <div id="listing">
         <?php
           foreach(glob('rendered/*.jpg') as $filename){
