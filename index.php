@@ -1,11 +1,82 @@
 <?php
   function save_file($file) {
     if ($file["filefield"]["error"] == 0 && $file['filefield']['type'] == 'image/jpeg') {
-      if (move_uploaded_file($file["filefield"]["tmp_name"], "uploads/" . $file["filefield"]["name"])) return TRUE;
+      if (move_uploaded_file($file["filefield"]["tmp_name"], "uploads/" . $file["filefield"]["name"])) {//return TRUE;
+        $path = "uploads/" . $file["filefield"]["name"];
+        $size = getimagesize($path);
+        if ($size[0] > $size[1]) {
+          print "landscape";
+          resize($path, 2480, 1748);
+        }
+        else {
+          print "portrait";
+        }
+
+
+
+
+
+        /*$overlay = imagecreatefrompng('assets/overlay-landscape.png');
+        $upload = imagecreatefromjpeg('uploads/' . $file["filefield"]["name"]);
+
+        imagealphablending($overlay, true);
+        imagesavealpha($overlay, true);
+
+        imagecopymerge($upload, $overlay, 0, 0, 0, 0, 2480, 1748, 100);
+
+        header('Content-Type: image/png');
+        imagepng($upload);
+
+        imagedestroy($upload);
+        imagedestroy($overlay);*/
+      }
+
     }
     return FALSE;
 
   }
+
+  function resize($path, $width, $height) {
+    $orig = imagecreatefromstring(file_get_contents($path));
+    $dest = ImageCreateTrueColor($width, $height);
+
+    $source_width = imagesx($orig);
+    $source_height = imagesy($orig);
+
+    if ((($source_width / $source_height) - ($width / $height)) == 0) {
+      $source_x = 0;
+      $source_y = 0;
+    }
+    if (($source_width / $source_height) > ($width / $height)) {
+      $source_y = 0;
+      $temp_width = ceil($source_height * $width / $height);
+      $source_x = ceil(($source_width - $temp_width) / 2);
+      $source_width = $temp_width;
+    }
+
+    ImageCopyResampled($dest, $orig, 0, 0, $source_x, $source_y, $width, $height, $source_width, $source_height);
+
+
+    $overlay = imagecreatefrompng('assets/overlay-landscape.png');
+    imagealphablending($overlay, true);
+    imagecopy($dest, $overlay, 0, 0, 0, 0, $width, $height);
+
+    imagejpeg($dest, 'rendered/pic-' . time() . '.jpg');
+
+    ImageDestroy($dest);
+    ImageDestroy($orig);
+    ImageDestroy($overlay);
+
+    return $dest;
+  }
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,34 +89,7 @@
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-      }
-
-      .form-upload {
-        max-width: 175px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-      .form-upload .form-upload-heading,
-      .form-upload .checkbox {
-        margin-bottom: 10px;
-      }
-
-      .lead { font-size: 15px; margin-bottom: 10px; line-height: 18px; }
-
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 
   </head>
   <body>
