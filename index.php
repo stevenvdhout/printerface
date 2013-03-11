@@ -10,8 +10,8 @@
         else {
           create_image($path, 1748, 2480, 'assets/overlay-portrait.png');
         }
+        return TRUE;
       }
-
     }
     return FALSE;
 
