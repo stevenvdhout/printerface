@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /media/GOOFY/printerface
 cd uploads
 filelist=`ls | egrep '.(jpg|JPG)'`
 cd ..

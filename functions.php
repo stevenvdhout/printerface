@@ -81,7 +81,7 @@
    */
   function create_image_imagemagick_exec($path, $width, $height, $overlay_path) {
     $time = time();
-    exec("/usr/local/ImageMagick/bin/convert $path -resize ".$width."x".$height."^ -gravity center -extent ".$width."x".$height." -page 0+0 ".$overlay_path." -layers coalesce -flatten rendered/pic-".$time.".jpg");
+    exec("/usr/bin/convert $path -resize ".$width."x".$height."^ -gravity center -extent ".$width."x".$height." -page 0+0 ".$overlay_path." -layers coalesce -flatten rendered/pic-".$time.".jpg");
     print "convert $path -resize ".$width."x".$height."^ -gravity center -extent ".$width."x".$height." -page 0+0 ".$overlay_path." -layers coalesce -flatten rendered/pic-".$time.".jpg";
   }
 

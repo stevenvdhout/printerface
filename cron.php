@@ -10,7 +10,7 @@
       else {
         create_image($path, 1748, 2480, 'assets/overlay-portrait.png');
       }
-      //rename($path, 'processed/pic-' . time() . '.jpg');
+      rename($path, 'processed/pic-' . time() . '.jpg');
     }
 
   }
